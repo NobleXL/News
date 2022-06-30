@@ -17,7 +17,7 @@ import com.noble.news.model.entity.NavigationItem
  */
 
 @Composable
-fun MainFrame() {
+fun MainFrame(statusBarHeight: Int) {
 
     val navigationItems = listOf(
         NavigationItem(title = "学习", icon = Icons.Filled.Home),
@@ -57,9 +57,9 @@ fun MainFrame() {
     }
     ) {
         when (currentNavigationIndex) {
-            0 -> StudyScreen()
+            0 -> StudyScreen(statusBarHeight)
             1 -> TaskScreen()
-            2 -> MineScreen()
+            2 -> MineScreen(statusBarHeight)
         }
     }
 
@@ -68,6 +68,6 @@ fun MainFrame() {
 @Preview
 @Composable
 fun MainFramePreview() {
-    MainFrame()
+    MainFrame(20)
 }
 
