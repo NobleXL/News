@@ -18,12 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.noble.news.ui.components.ArticleItem
-import com.noble.news.ui.components.NotificationContent
-import com.noble.news.ui.components.SwiperContent
+import com.noble.news.model.entity.VideoEntity
+import com.noble.news.ui.components.*
 import com.noble.news.ui.components.TopAppBar
 import com.noble.news.viewmodel.ArticleViewModel
 import com.noble.news.viewmodel.MainViewModel
+import com.noble.news.viewmodel.VideoViewModel
 
 /**
  * @author 小寒
@@ -32,7 +32,11 @@ import com.noble.news.viewmodel.MainViewModel
  */
 
 @Composable
-fun StudyScreen(vm: MainViewModel = viewModel(), articleViewModel: ArticleViewModel = viewModel()) {
+fun StudyScreen(
+    vm: MainViewModel = viewModel(),
+    articleViewModel: ArticleViewModel = viewModel(),
+    videoViewModel: VideoViewModel = viewModel()
+) {
     Column(modifier = Modifier) {
         //标题栏
         TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
@@ -150,10 +154,14 @@ fun StudyScreen(vm: MainViewModel = viewModel(), articleViewModel: ArticleViewMo
             }
 
             //新闻列表
-            items(articleViewModel.list) { article ->
-                ArticleItem(article)
-            }
+//            items(articleViewModel.list) { article ->
+//                ArticleItem(article)
+//            }
 
+            //视频列表
+            items(videoViewModel.list) { videoEntity ->
+                VideoItem(videoEntity = videoEntity)
+            }
         }
 
     }
