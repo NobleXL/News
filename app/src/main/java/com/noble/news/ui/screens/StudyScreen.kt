@@ -1,5 +1,6 @@
 package com.noble.news.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,9 +15,11 @@ import com.noble.news.ui.components.TopAppBar
  */
 
 @Composable
-fun StudyScreen(statusBarHeight: Int) {
-    Column(modifier = Modifier) {
-        TopAppBar(statusBarHeight) {
+fun StudyScreen() {
+    Column(modifier = Modifier.clickable {
+
+    }) {
+        TopAppBar() {
             Text(text = "学习页")
         }
         Text(text = "学习页")
@@ -26,6 +29,6 @@ fun StudyScreen(statusBarHeight: Int) {
 @Preview
 @Composable
 fun StudyScreenPreview() {
-    StudyScreen(20)
+    StudyScreen()
 }
 

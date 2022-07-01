@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.noble.news.ui.theme.Blue200
 import com.noble.news.ui.theme.Blue700
 
@@ -30,14 +32,20 @@ import com.noble.news.ui.theme.Blue700
  * @param content  标题栏内容
  */
 @Composable
-fun TopAppBar(statusBarHeight: Int, content: @Composable () -> Unit) {
+fun TopAppBar(content: @Composable () -> Unit) {
+
+    val systemUiController = rememberSystemUiController()
+
+    LaunchedEffect(key1 = Unit){
+        systemUiController.setStatusBarColor(Color.Transparent)
+    }
 
     //标题栏高度
     val appBarHeight = 56.dp
 
     //转换状态栏高度 px 为 dp
     val statusBarHeightDp = with(LocalDensity.current) {
-        statusBarHeight.toDp()
+        LocalWindowInsets.current.statusBars.top.toDp()
     }
 
     Row(
@@ -64,7 +72,7 @@ fun TopAppBar(statusBarHeight: Int, content: @Composable () -> Unit) {
 @Preview
 @Composable
 fun TopAppBarPreview() {
-    TopAppBar(30) {
+    TopAppBar() {
         Text("标题")
     }
 }

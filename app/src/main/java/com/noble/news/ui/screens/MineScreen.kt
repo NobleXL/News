@@ -14,9 +14,9 @@ import com.noble.news.ui.components.TopAppBar
  */
 
 @Composable
-fun MineScreen(statusBarHeight: Int) {
+fun MineScreen() {
     Column(modifier = Modifier) {
-        TopAppBar(statusBarHeight) {
+        TopAppBar() {
             Text(text = "我的页面")
         }
         Text(text = "我的页面")
@@ -26,6 +26,6 @@ fun MineScreen(statusBarHeight: Int) {
 @Preview
 @Composable
 fun MineScreenPreview() {
-    MineScreen(20)
+    MineScreen()
 }
 
