@@ -1,29 +1,28 @@
 package com.noble.news.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
+import com.noble.news.ui.components.ArticleItem
 import com.noble.news.ui.components.NotificationContent
 import com.noble.news.ui.components.SwiperContent
 import com.noble.news.ui.components.TopAppBar
+import com.noble.news.viewmodel.ArticleViewModel
 import com.noble.news.viewmodel.MainViewModel
 
 /**
@@ -33,7 +32,7 @@ import com.noble.news.viewmodel.MainViewModel
  */
 
 @Composable
-fun StudyScreen(vm: MainViewModel = viewModel()) {
+fun StudyScreen(vm: MainViewModel = viewModel(), articleViewModel: ArticleViewModel = viewModel()) {
     Column(modifier = Modifier) {
         //标题栏
         TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
@@ -138,11 +137,24 @@ fun StudyScreen(vm: MainViewModel = viewModel()) {
             }
         }
 
-        //轮播图
-        SwiperContent(vm = vm)
+        LazyColumn() {
 
-        //通知公告
-        NotificationContent(vm)
+            //轮播图
+            item {
+                SwiperContent(vm = vm)
+            }
+
+            //通知公告
+            item {
+                NotificationContent(vm)
+            }
+
+            //新闻列表
+            items(articleViewModel.list) { article ->
+                ArticleItem(article)
+            }
+
+        }
 
     }
 }
