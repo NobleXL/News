@@ -2,11 +2,9 @@ package com.noble.news.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +15,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.noble.news.ui.components.TopAppBar
+import com.noble.news.viewmodel.MainViewModel
 
 /**
  * @author 小寒
@@ -26,11 +26,10 @@ import com.noble.news.ui.components.TopAppBar
  */
 
 @Composable
-fun StudyScreen() {
+fun StudyScreen(vm: MainViewModel = viewModel()) {
     Column(modifier = Modifier) {
-        TopAppBar() {
-
-            Spacer(modifier = Modifier.width(8.dp))
+        //标题栏
+        TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
 
             //搜索按钮
             Surface(
@@ -76,9 +75,34 @@ fun StudyScreen() {
                 tint = Color.White
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
         }
-        Text(text = "学习页")
+
+        //分类标签
+        TabRow(
+            selectedTabIndex = vm.categoryIndex,
+            backgroundColor = Color(0x22149EE7),
+            contentColor = Color(0xFF149EE7)
+        ) {
+            vm.categories.forEachIndexed { index, category ->
+                Tab(
+                    selected = vm.categoryIndex == index,
+                    onClick = {
+                        vm.updateCategoryIndex(index)
+                    },
+                    selectedContentColor = Color(0xFF149EE7),
+                    unselectedContentColor = Color(0xFF666666)
+                ) {
+                    Text(
+                        text = category.title,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+
+        }
+
+
     }
 }
 

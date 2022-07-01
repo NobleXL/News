@@ -50,6 +50,7 @@ fun TopAppBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .background(
                 Brush.linearGradient(
                     listOf(
@@ -58,9 +59,9 @@ fun TopAppBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
                     )
                 )
             )
-            .fillMaxWidth()
             .height(appBarHeight + statusBarHeightDp)
-            .padding(top = statusBarHeightDp),
+            .padding(top = statusBarHeightDp)
+            .then(modifier),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
