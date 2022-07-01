@@ -12,11 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.noble.news.ui.components.SwiperContent
 import com.noble.news.ui.components.TopAppBar
 import com.noble.news.viewmodel.MainViewModel
 
@@ -119,7 +124,7 @@ fun StudyScreen(vm: MainViewModel = viewModel()) {
                     selectedContentColor = Color(0xFF149EE7),
                     unselectedContentColor = Color(0xFF666666),
                     icon = {
-                           Icon(imageVector = dataType.icon, contentDescription = null)
+                        Icon(imageVector = dataType.icon, contentDescription = null)
                     },
                     text = {
                         Text(
@@ -131,6 +136,9 @@ fun StudyScreen(vm: MainViewModel = viewModel()) {
                 )
             }
         }
+
+        //轮播图
+        SwiperContent(vm = vm)
 
     }
 }
