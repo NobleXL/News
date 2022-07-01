@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.noble.news.ui.components.NotificationContent
 import com.noble.news.ui.components.SwiperContent
 import com.noble.news.ui.components.TopAppBar
 import com.noble.news.viewmodel.MainViewModel
@@ -139,6 +140,9 @@ fun StudyScreen(vm: MainViewModel = viewModel()) {
 
         //轮播图
         SwiperContent(vm = vm)
+
+        //通知公告
+        NotificationContent(vm)
 
     }
 }

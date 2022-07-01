@@ -70,4 +70,8 @@ class MainViewModel : ViewModel() {
         SwiperEntity("https://docs.bughub.icu/compose/assets/banner4.jpg"),
         SwiperEntity("https://docs.bughub.icu/compose/assets/banner5.jpg")
     )
+
+    //通知数据
+    val notifications =
+        listOf("人社部向疫情防控期", "湖北黄冈新冠肺炎患者治愈病例破千连续5治愈病例破例千连续5", "安徽单日新增确诊病例首次降至个位数累计")
 }
