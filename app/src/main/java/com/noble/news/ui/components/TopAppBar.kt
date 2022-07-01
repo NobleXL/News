@@ -32,7 +32,7 @@ import com.noble.news.ui.theme.Blue700
  * @param content  标题栏内容
  */
 @Composable
-fun TopAppBar(content: @Composable () -> Unit) {
+fun TopAppBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 
     val systemUiController = rememberSystemUiController()
 
