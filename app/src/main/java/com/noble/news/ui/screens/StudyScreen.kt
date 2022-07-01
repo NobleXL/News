@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,6 +103,34 @@ fun StudyScreen(vm: MainViewModel = viewModel()) {
 
         }
 
+        // 类型标签
+        TabRow(
+            selectedTabIndex = vm.currentTypeIndex,
+            backgroundColor = Color.Transparent,
+            contentColor = Color(0xFF149EE7),
+            indicator = {},
+            divider = {}
+        ) {
+            vm.types.forEachIndexed { index, dataType ->
+                LeadingIconTab(
+                    selected = vm.currentTypeIndex == index, onClick = {
+                        vm.updateTypeIndex(index)
+                    },
+                    selectedContentColor = Color(0xFF149EE7),
+                    unselectedContentColor = Color(0xFF666666),
+                    icon = {
+                           Icon(imageVector = dataType.icon, contentDescription = null)
+                    },
+                    text = {
+                        Text(
+                            text = dataType.title,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            fontSize = 16.sp
+                        )
+                    }
+                )
+            }
+        }
 
     }
 }
