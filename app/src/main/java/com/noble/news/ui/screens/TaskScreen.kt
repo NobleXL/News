@@ -2,16 +2,25 @@ package com.noble.news.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.noble.news.ui.components.appBarHeight
+import com.noble.news.viewmodel.TaskViewModel
+import okhttp3.internal.concurrent.Task
 
 /**
  * @author 小寒
@@ -20,7 +29,14 @@ import com.noble.news.ui.components.appBarHeight
  */
 
 @Composable
-fun TaskScreen() {
+fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
+
+    //圆环高度
+    var boxWidthDp: Int
+    with(LocalConfiguration.current) {
+        boxWidthDp = screenWidthDp / 2
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -30,6 +46,7 @@ fun TaskScreen() {
                 )
             )
     ) {
+        //标题栏
         Row(
             modifier = Modifier
                 .statusBarsPadding()
@@ -44,6 +61,51 @@ fun TaskScreen() {
                 color = Color.White,
                 fontSize = 18.sp
             )
+        }
+
+        LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+            //学习周期
+            item {
+                Text(
+                    text = taskVM.taskDate,
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                )
+            }
+
+            //学习进度
+            item {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.height(boxWidthDp.dp)
+                ) {
+                    //圆环
+
+                    //进度数据
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            buildAnnotatedString {
+                                append(taskVM.pointOfYear)
+                                withStyle(SpanStyle(fontSize = 12.sp)) {
+                                    append("分")
+                                }
+                            },
+                            fontSize = 36.sp,
+                            color = Color.White
+                        )
+
+                        Text(
+                            text = "学年积分",
+                            fontSize = 12.sp,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
         }
     }
 }
