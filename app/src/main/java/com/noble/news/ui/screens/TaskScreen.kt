@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.noble.news.ui.components.CircleRing
 import com.noble.news.ui.components.appBarHeight
 import com.noble.news.viewmodel.TaskViewModel
 import okhttp3.internal.concurrent.Task
@@ -35,6 +37,11 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
     var boxWidthDp: Int
     with(LocalConfiguration.current) {
         boxWidthDp = screenWidthDp / 2
+    }
+
+    //当学年积分改变时重新计算百分比
+    LaunchedEffect(taskVM.pointOfYear) {
+        taskVM.updatePointPercent()
     }
 
     Column(
@@ -81,15 +88,21 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
             item {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.height(boxWidthDp.dp)
+                    modifier = Modifier
+                        .height(boxWidthDp.dp)
+                        .padding(top = 8.dp)
                 ) {
                     //圆环
+                    CircleRing(boxWidthDp = boxWidthDp, taskVM)
 
                     //进度数据
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.offset(y = (-10).dp)
+                    ) {
                         Text(
                             buildAnnotatedString {
-                                append(taskVM.pointOfYear)
+                                append(taskVM.pointOfYear.toString())
                                 withStyle(SpanStyle(fontSize = 12.sp)) {
                                     append("分")
                                 }
@@ -100,6 +113,40 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
 
                         Text(
                             text = "学年积分",
+                            fontSize = 12.sp,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = (-50).dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "${taskVM.totalPointOfYear}分",
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                        Text(
+                            text = "学年规定积分",
+                            fontSize = 12.sp,
+                            color = Color.White
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = "${taskVM.totalPointOfYear - taskVM.pointOfYear}分",
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                        Text(
+                            text = "还差",
                             fontSize = 12.sp,
                             color = Color.White
                         )
