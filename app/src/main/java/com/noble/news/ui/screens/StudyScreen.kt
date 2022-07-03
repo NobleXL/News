@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -153,15 +154,19 @@ fun StudyScreen(
                 NotificationContent(vm)
             }
 
-            //新闻列表
-//            items(articleViewModel.list) { article ->
-//                ArticleItem(article)
-//            }
-
-            //视频列表
-            items(videoViewModel.list) { videoEntity ->
-                VideoItem(videoEntity = videoEntity)
+            // 互相切换时，当前的滑动状态会保留
+            if (vm.showArticleList) {
+                //文章列表
+                items(articleViewModel.list) { article ->
+                    ArticleItem(article)
+                }
+            } else {
+                //视频列表
+                items(videoViewModel.list) { videoEntity ->
+                    VideoItem(videoEntity = videoEntity)
+                }
             }
+
         }
 
     }

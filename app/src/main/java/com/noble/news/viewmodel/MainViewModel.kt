@@ -49,8 +49,12 @@ class MainViewModel : ViewModel() {
         )
     )
 
-    // 当前类型下标
+    //当前类型下标
     var currentTypeIndex by mutableStateOf(0)
+        private set
+
+    //是否显示文章列表
+    var showArticleList by mutableStateOf(true)
         private set
 
     /**
@@ -60,6 +64,7 @@ class MainViewModel : ViewModel() {
      */
     fun updateTypeIndex(index: Int) {
         currentTypeIndex = index
+        showArticleList = currentTypeIndex == 0
     }
 
     //轮播图数据

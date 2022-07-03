@@ -25,6 +25,9 @@ import com.noble.news.ui.theme.Blue700
  * @date 2022/6/30 18:58
  */
 
+//标题栏高度
+val appBarHeight = 56.dp
+
 /**
  * 统一标题栏
  *
@@ -39,9 +42,6 @@ fun TopAppBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     LaunchedEffect(key1 = Unit){
         systemUiController.setStatusBarColor(Color.Transparent)
     }
-
-    //标题栏高度
-    val appBarHeight = 56.dp
 
     //转换状态栏高度 px 为 dp
     val statusBarHeightDp = with(LocalDensity.current) {
