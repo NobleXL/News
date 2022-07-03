@@ -31,4 +31,10 @@ class TaskViewModel : ViewModel() {
     fun updatePointPercent() {
         pointOfYearPercent = 200f * pointOfYear / totalPointOfYear
     }
+
+    //一周积分情况
+    var pointsOfWeek by mutableStateOf(listOf(0.0, 2.0, 6.0, 9.5, 10.0, 15.0, 5.0))
+        private set
+
+    val weeks = listOf("02.05", "02.06", "02.07", "02.08", "02.09", "02.10", "今日")
 }

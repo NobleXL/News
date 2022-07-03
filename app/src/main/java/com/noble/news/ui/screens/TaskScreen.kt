@@ -3,11 +3,13 @@ package com.noble.news.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -19,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.noble.news.ui.components.ChartView
 import com.noble.news.ui.components.CircleRing
 import com.noble.news.ui.components.appBarHeight
 import com.noble.news.viewmodel.TaskViewModel
@@ -151,6 +154,45 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                             color = Color.White
                         )
                     }
+                }
+            }
+
+            //学习明细
+            item {
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                        .fillMaxSize()
+                        .background(Color.White)
+                        .padding(top = 8.dp)
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        text = "学习明细",
+                        fontSize = 16.sp,
+                        color = Color(0xFF333333)
+                    )
+                    Text(
+                        text = "最近一周获得积分情况",
+                        fontSize = 14.sp,
+                        color = Color(0xFF999999)
+                    )
+
+                    //积分情况的折线图
+                    ChartView(taskVM.pointsOfWeek, modifier = Modifier.padding(vertical = 8.dp))
+
+                    Row() {
+                        taskVM.weeks.forEach {
+                            Text(
+                                text = it,
+                                fontSize = 12.sp,
+                                color = Color(0xFF999999),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+
                 }
             }
         }
