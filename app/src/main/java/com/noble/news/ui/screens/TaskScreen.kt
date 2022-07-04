@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.noble.news.ui.components.ChartView
 import com.noble.news.ui.components.CircleRing
+import com.noble.news.ui.components.DailyTaskContent
 import com.noble.news.ui.components.appBarHeight
 import com.noble.news.viewmodel.TaskViewModel
 import okhttp3.internal.concurrent.Task
@@ -209,6 +210,9 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                             .padding(8.dp)
                             .fillMaxWidth()
                     )
+
+                    //每日任务
+                    DailyTaskContent()
 
                 }
             }
