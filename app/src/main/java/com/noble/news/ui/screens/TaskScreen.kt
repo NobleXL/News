@@ -45,6 +45,7 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
     //当学年积分改变时重新计算百分比
     LaunchedEffect(taskVM.pointOfYear) {
         taskVM.updatePointPercent()
+        taskVM.updateTips()
     }
 
     Column(
@@ -181,6 +182,7 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                     //积分情况的折线图
                     ChartView(taskVM.pointsOfWeek, modifier = Modifier.padding(vertical = 8.dp))
 
+                    //日期
                     Row() {
                         taskVM.weeks.forEach {
                             Text(
@@ -192,6 +194,21 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                             )
                         }
                     }
+
+                    //今日任务提醒
+                    Text(
+                        text = taskVM.tips,
+                        color = Color(0xFF139EE7),
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(
+                                Color(0x33139EE7)
+                            )
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                    )
 
                 }
             }
