@@ -1,5 +1,6 @@
 package com.noble.news.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,7 +37,8 @@ import com.noble.news.viewmodel.VideoViewModel
 fun StudyScreen(
     vm: MainViewModel = viewModel(),
     articleViewModel: ArticleViewModel = viewModel(),
-    videoViewModel: VideoViewModel = viewModel()
+    videoViewModel: VideoViewModel = viewModel(),
+    onNavigateToArticle: () -> Unit = {}
 ) {
     Column(modifier = Modifier) {
         //标题栏
@@ -158,7 +160,12 @@ fun StudyScreen(
             if (vm.showArticleList) {
                 //文章列表
                 items(articleViewModel.list) { article ->
-                    ArticleItem(article)
+                    ArticleItem(
+                        article,
+                        modifier = Modifier.clickable {
+                            onNavigateToArticle()
+                        }
+                    )
                 }
             } else {
                 //视频列表

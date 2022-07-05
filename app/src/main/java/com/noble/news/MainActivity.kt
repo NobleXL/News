@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import com.noble.news.ui.components.NavHostApp
 import com.noble.news.ui.screens.MainFrame
 import com.noble.news.ui.theme.NewsTheme
 
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainFrame()
+                    NavHostApp()
                 }
             }
         }

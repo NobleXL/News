@@ -1,10 +1,5 @@
 package com.noble.news.ui.components
 
-/**
- * @author 小寒
- * @version 1.0
- * @date 2022/7/1 19:24
- */
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -17,10 +12,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.noble.news.model.entity.ArticleEntity
 
+/**
+ * @author 小寒
+ * @version 1.0
+ * @date 2022/7/1 19:24
+ *
+ * 文章列表 item
+ *
+ * @param article
+ * @param modifier
+ */
 @Composable
-fun ArticleItem(article: ArticleEntity) {
+fun ArticleItem(article: ArticleEntity, modifier: Modifier = Modifier) {
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = article.title,
             color = Color(0xFF333333),
@@ -47,9 +52,9 @@ fun ArticleItem(article: ArticleEntity) {
                 overflow = TextOverflow.Ellipsis
             )
         }
-    
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Divider()
     }
 

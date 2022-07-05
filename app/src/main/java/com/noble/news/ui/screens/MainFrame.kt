@@ -22,7 +22,7 @@ import com.noble.news.model.entity.NavigationItem
  */
 
 @Composable
-fun MainFrame() {
+fun MainFrame(onNavigateToArticle: () -> Unit = {}) {
 
     val navigationItems = listOf(
         NavigationItem(title = "学习", icon = Icons.Filled.Home),
@@ -64,7 +64,7 @@ fun MainFrame() {
         }) {
             Box(modifier = Modifier.padding(it)) {
                 when (currentNavigationIndex) {
-                    0 -> StudyScreen()
+                    0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle)
                     1 -> TaskScreen()
                     2 -> MineScreen()
                 }

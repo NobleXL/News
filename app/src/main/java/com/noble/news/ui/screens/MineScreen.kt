@@ -1,5 +1,6 @@
 package com.noble.news.ui.screens
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
