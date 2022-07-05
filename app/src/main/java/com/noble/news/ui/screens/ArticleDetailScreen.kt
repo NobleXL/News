@@ -90,6 +90,7 @@ fun ArticleDetailScreen(articleViewModel: ArticleViewModel = viewModel(), onBack
                     value = fontScale,
                     onValueChange = {
                         fontScale = it
+                        webViewState.evaluateJavascript("document.body.style.zoom = $it")
                     },
                     steps = 3,
                     valueRange = 0.75f..1.75f
