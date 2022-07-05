@@ -34,44 +34,41 @@ fun MainFrame(onNavigateToArticle: () -> Unit = {}) {
         mutableStateOf(0)
     }
 
-    ProvideWindowInsets {
-        Scaffold(bottomBar = {
-            BottomNavigation(
-                backgroundColor = MaterialTheme.colors.surface,
-                modifier = Modifier.navigationBarsPadding()
-            ) {
-                navigationItems.forEachIndexed { index, navigationItem ->
-                    BottomNavigationItem(
-                        selected = currentNavigationIndex == index,
-                        onClick = {
-                            currentNavigationIndex = index
-                        },
-                        //直接考试结果页面，进入查看页面，返回直接回到列表？
-                        icon = {
-                            Icon(
-                                imageVector = navigationItem.icon,
-                                contentDescription = null
-                            )
-                        },
-                        label = {
-                            Text(text = navigationItem.title)
-                        },
-                        selectedContentColor = Color(0xFF149EE7),
-                        unselectedContentColor = Color(0xFF999999)
-                    )
-                }
+    Scaffold(bottomBar = {
+        BottomNavigation(
+            backgroundColor = MaterialTheme.colors.surface,
+            modifier = Modifier.navigationBarsPadding()
+        ) {
+            navigationItems.forEachIndexed { index, navigationItem ->
+                BottomNavigationItem(
+                    selected = currentNavigationIndex == index,
+                    onClick = {
+                        currentNavigationIndex = index
+                    },
+                    //直接考试结果页面，进入查看页面，返回直接回到列表？
+                    icon = {
+                        Icon(
+                            imageVector = navigationItem.icon,
+                            contentDescription = null
+                        )
+                    },
+                    label = {
+                        Text(text = navigationItem.title)
+                    },
+                    selectedContentColor = Color(0xFF149EE7),
+                    unselectedContentColor = Color(0xFF999999)
+                )
             }
-        }) {
-            Box(modifier = Modifier.padding(it)) {
-                when (currentNavigationIndex) {
-                    0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle)
-                    1 -> TaskScreen()
-                    2 -> MineScreen()
-                }
+        }
+    }) {
+        Box(modifier = Modifier.padding(it)) {
+            when (currentNavigationIndex) {
+                0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle)
+                1 -> TaskScreen()
+                2 -> MineScreen()
             }
         }
     }
-
 }
 
 @Preview
