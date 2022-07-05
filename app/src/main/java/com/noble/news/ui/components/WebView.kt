@@ -14,7 +14,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 fun WebView(state: WebViewState) {
 
     AndroidView(factory = { context ->
-        android.webkit.WebView(context)
+        android.webkit.WebView(context).apply {
+            with(settings) {
+                javaScriptEnabled = true
+            }
+        }
     }) { view ->
 
         when (val content = state.content) {
@@ -50,6 +54,11 @@ class WebViewState(webContent: WebContent) {
 
     //TODO 遗留问题
     val pageTitle: String? by mutableStateOf(null)
+
+    //执行 js 方法
+    fun evaluateJavascript(script: String, resultCallback: ((String) -> Unit)? = {}) {
+
+    }
 }
 
 @Composable
