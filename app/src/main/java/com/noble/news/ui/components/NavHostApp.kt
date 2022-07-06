@@ -11,6 +11,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.noble.news.ui.navigation.Destinations
 import com.noble.news.ui.screens.ArticleDetailScreen
 import com.noble.news.ui.screens.MainFrame
+import com.noble.news.ui.screens.VideoDetailScreen
 
 /**
  * @author 小寒
@@ -40,6 +41,8 @@ fun NavHostApp() {
                 }) {
                 MainFrame(onNavigateToArticle = {
                     navController.navigate(Destinations.ArticleDetail.route)
+                }, onNavigateToVideo = {
+                    navController.navigate(Destinations.VideoDetail.route)
                 })
             }
 
@@ -53,6 +56,20 @@ fun NavHostApp() {
                     slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
                 }) {
                 ArticleDetailScreen(onBack = {
+                    navController.popBackStack()
+                })
+            }
+
+            //视频详情页
+            composable(
+                Destinations.VideoDetail.route,
+                enterTransition = {
+                    slideIntoContainer(AnimatedContentScope.SlideDirection.Left)
+                },
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
+                }) {
+                VideoDetailScreen(onBack = {
                     navController.popBackStack()
                 })
             }

@@ -28,7 +28,7 @@ import coil.compose.AsyncImage
 import com.noble.news.model.entity.VideoEntity
 
 @Composable
-fun VideoItem(videoEntity: VideoEntity) {
+fun VideoItem(modifier: Modifier = Modifier,videoEntity: VideoEntity) {
 
     val constraintSet = ConstraintSet {
         val title = createRefFor("title")
@@ -65,7 +65,7 @@ fun VideoItem(videoEntity: VideoEntity) {
     }
 
     ConstraintLayout(
-        constraintSet, modifier = Modifier
+        constraintSet, modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
