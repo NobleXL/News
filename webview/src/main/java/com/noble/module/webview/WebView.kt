@@ -1,4 +1,4 @@
-package com.noble.news.ui.components
+package com.noble.news.module.webview
 
 import android.graphics.Bitmap
 import android.webkit.WebChromeClient
@@ -10,6 +10,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -36,14 +37,14 @@ fun WebView(state: WebViewState) {
 
     AndroidView(factory = { context ->
         WebView(context).apply {
-            webChromeClient = object :WebChromeClient() {
+            webChromeClient = object : WebChromeClient() {
                 override fun onReceivedTitle(view: WebView?, title: String?) {
                     super.onReceivedTitle(view, title)
                     state.pageTitle = title
                 }
             }
 
-            webViewClient = object :WebViewClient() {
+            webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
                     state.pageTitle = null
@@ -87,8 +88,8 @@ class WebViewState(private val coroutineScope: CoroutineScope, webContent: WebCo
     //网页内容：url 或者 data(html 内容)
     var content by mutableStateOf(webContent)
 
-    //TODO 遗留问题：调用范围问题?不能设置为 private ，那应该怎么办
     var pageTitle: String? by mutableStateOf(null)
+        internal set
 
     //事件类型
     private enum class EventType {
@@ -101,9 +102,9 @@ class WebViewState(private val coroutineScope: CoroutineScope, webContent: WebCo
     //共享流
     private val events: MutableSharedFlow<Event> = MutableSharedFlow()
 
-    suspend fun WebView.handleEvents(): Unit = withContext(Dispatchers.Main) {
+    internal suspend fun WebView.handleEvents(): Unit = withContext(Dispatchers.Main) {
         events.collect { event ->
-            when (event.type) {
+            when(event.type) {
                 EventType.EVALUATE_JAVASCRIPT -> evaluateJavascript(event.args, event.callback)
             }
         }

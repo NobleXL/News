@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.statusBarsPadding
-import com.noble.news.ui.components.WebView
-import com.noble.news.ui.components.rememberWebViewState
+import com.noble.news.module.webview.WebView
+import com.noble.news.module.webview.rememberWebViewState
 import com.noble.news.viewmodel.ArticleViewModel
 import kotlinx.coroutines.launch
 
