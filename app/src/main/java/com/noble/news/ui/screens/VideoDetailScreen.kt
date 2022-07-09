@@ -17,6 +17,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.noble.news.module.webview.WebView
 import com.noble.news.module.webview.rememberWebViewState
 import com.noble.news.ui.components.video.VideoView
+import com.noble.news.ui.components.video.rememberVodController
 import com.noble.news.viewmodel.VideoViewModel
 import com.tencent.rtmp.TXPlayerGlobalSetting
 import com.tencent.rtmp.TXVodPlayConfig
@@ -32,15 +33,14 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
 
     val webViewState = rememberWebViewState(data = videoViewModel.videoDesc)
 
-    val vodPlayer = TXVodPlayer(LocalContext.current)
+    val vodController = rememberVodController()
 
     //设置播放引擎的全局缓存目录和缓存大小(不然会出现闪退情况)
     TXPlayerGlobalSetting.setCacheFolderPath(LocalContext.current.getExternalFilesDir(null)?.absolutePath + "/cache")
     TXPlayerGlobalSetting.setMaxCacheSize(1)
 
-    LaunchedEffect(vodPlayer) {
-        //http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4
-        vodPlayer.startPlay("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
+    LaunchedEffect(vodController) {
+        vodController.startPlay(videoViewModel.videoUrl)
     }
     
     Scaffold(
@@ -71,7 +71,7 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
         Column(modifier = Modifier.fillMaxSize()) {
             //视频区域
             Box(modifier = Modifier.height(200.dp)) {
-                VideoView(vodPlayer = vodPlayer)
+                VideoView(vodPlayer = vodController.vodPlayer)
             }
             //想让标题一起滚动，有两个方案
             //方案一：把标题放到视频简介的 html 文本中去
