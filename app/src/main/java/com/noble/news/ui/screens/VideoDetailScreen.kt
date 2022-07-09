@@ -7,17 +7,20 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.statusBarsPadding
 import com.noble.news.module.webview.WebView
 import com.noble.news.module.webview.rememberWebViewState
+import com.noble.news.ui.components.video.VideoView
 import com.noble.news.viewmodel.VideoViewModel
+import com.tencent.rtmp.TXPlayerGlobalSetting
+import com.tencent.rtmp.TXVodPlayConfig
+import com.tencent.rtmp.TXVodPlayer
 
 /**
  * @author 小寒
@@ -29,6 +32,17 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
 
     val webViewState = rememberWebViewState(data = videoViewModel.videoDesc)
 
+    val vodPlayer = TXVodPlayer(LocalContext.current)
+
+    //设置播放引擎的全局缓存目录和缓存大小(不然会出现闪退情况)
+    TXPlayerGlobalSetting.setCacheFolderPath(LocalContext.current.getExternalFilesDir(null)?.absolutePath + "/cache")
+    TXPlayerGlobalSetting.setMaxCacheSize(1)
+
+    LaunchedEffect(vodPlayer) {
+        //http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4
+        vodPlayer.startPlay("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
+    }
+    
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,7 +70,9 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             //视频区域
-            Box(modifier = Modifier.height(200.dp))
+            Box(modifier = Modifier.height(200.dp)) {
+                VideoView(vodPlayer = vodPlayer)
+            }
             //想让标题一起滚动，有两个方案
             //方案一：把标题放到视频简介的 html 文本中去
             //方案二：计算 视频简介在 webview中的高度，然后动态设置 webview 的高度
