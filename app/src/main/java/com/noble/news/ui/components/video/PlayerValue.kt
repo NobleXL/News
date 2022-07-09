@@ -1,8 +1,10 @@
 package com.noble.news.ui.components.video
 
+import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.parcelize.Parcelize
 
 /**
  * @author 小寒
@@ -12,7 +14,15 @@ import androidx.compose.runtime.setValue
  * 播放器相关数据类
  *
  */
-class PlayerValue {
+@Parcelize
+class PlayerValue : Parcelable {
+
+    var coverUrl: String = ""
+
+    var title: String = ""
+
+    //存储 url 目的是为了横竖屏切换等重绘的场景
+    var videoUrl: String = ""
 
     //视频总时长
     var duration by mutableStateOf(0L)
