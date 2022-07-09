@@ -22,18 +22,27 @@ class VodController(context: Context) {
         setVodListener(object : ITXVodPlayListener {
             override fun onPlayEvent(player: TXVodPlayer?, event: Int, param: Bundle?) {
                 when (event) {
+                    TXLiveConstants.PLAY_EVT_PLAY_LOADING -> {
+                        playerValue.state = PlayState.Loading
+                    }
+                    TXLiveConstants.PLAY_EVT_VOD_PLAY_PREPARED,
+                    TXLiveConstants.PLAY_EVT_RCV_FIRST_I_FRAME,
+                    TXLiveConstants.PLAY_EVT_VOD_LOADING_END,
+                    TXLiveConstants.PLAY_EVT_PLAY_BEGIN -> {
+                        playerValue.state = PlayState.Playing
+                    }
                     //获取视频时长和进度
                     TXLiveConstants.PLAY_EVT_PLAY_PROGRESS -> {
                         playerValue.duration =
-                            param?.getInt(TXLiveConstants.EVT_PLAY_DURATION)?.toLong() ?: 0L
+                            param?.getInt(TXLiveConstants.EVT_PLAY_DURATION_MS)?.toLong() ?: 0L
                         playerValue.currentPosition =
-                            param?.getInt(TXLiveConstants.EVT_PLAY_PROGRESS)?.toLong() ?: 0L
+                            param?.getInt(TXLiveConstants.EVT_PLAY_PROGRESS_MS)?.toLong() ?: 0L
                     }
                 }
             }
 
             override fun onNetStatus(player: TXVodPlayer?, param: Bundle?) {
-                TODO("Not yet implemented")
+
             }
 
         })
@@ -60,6 +69,7 @@ class VodController(context: Context) {
      */
     fun pause() {
         vodPlayer.pause()
+        playerValue.state = PlayState.Pause
     }
 
     /**

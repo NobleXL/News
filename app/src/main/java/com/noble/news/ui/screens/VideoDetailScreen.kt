@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.statusBarsPadding
 import com.noble.news.module.webview.WebView
 import com.noble.news.module.webview.rememberWebViewState
+import com.noble.news.ui.components.video.VideoPlayer
 import com.noble.news.ui.components.video.VideoView
 import com.noble.news.ui.components.video.rememberVodController
 import com.noble.news.viewmodel.VideoViewModel
@@ -71,7 +72,7 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
         Column(modifier = Modifier.fillMaxSize()) {
             //视频区域
             Box(modifier = Modifier.height(200.dp)) {
-                VideoView(vodPlayer = vodController.vodPlayer)
+                VideoPlayer(vodController = vodController)
             }
             //想让标题一起滚动，有两个方案
             //方案一：把标题放到视频简介的 html 文本中去
