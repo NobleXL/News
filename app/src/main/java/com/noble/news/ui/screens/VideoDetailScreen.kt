@@ -34,14 +34,14 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
 
     val webViewState = rememberWebViewState(data = videoViewModel.videoDesc)
 
-    val vodController = rememberVodController()
+    val vodController = rememberVodController(videoUrl = videoViewModel.videoUrl, coverUrl = videoViewModel.coverUrl)
 
     //设置播放引擎的全局缓存目录和缓存大小(不然会出现闪退情况)
     TXPlayerGlobalSetting.setCacheFolderPath(LocalContext.current.getExternalFilesDir(null)?.absolutePath + "/cache")
     TXPlayerGlobalSetting.setMaxCacheSize(1)
 
     LaunchedEffect(vodController) {
-        vodController.startPlay(videoViewModel.videoUrl)
+//        vodController.startPlay(videoViewModel.videoUrl)
     }
     
     Scaffold(
