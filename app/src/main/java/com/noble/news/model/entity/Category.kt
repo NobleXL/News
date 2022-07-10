@@ -12,5 +12,16 @@ package com.noble.news.model.entity
  * @property title
  */
 data class Category(
-    val title: String
+    val title: String,
+    val id: String
 )
+
+/**
+ * Category Response
+ *
+ * @property data List<Category>
+ * @constructor
+ */
+data class CategoryResponse(var data: List<Category>) : BaseResponse() {
+
+}

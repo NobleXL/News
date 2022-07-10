@@ -42,6 +42,11 @@ fun StudyScreen(
     onNavigateToVideo: () -> Unit = {},
     onNavigateToStudyHistory: () -> Unit = {}
 ) {
+
+    LaunchedEffect(Unit) {
+        vm.categoryData()
+    }
+
     Column(modifier = Modifier) {
         //标题栏
         TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {

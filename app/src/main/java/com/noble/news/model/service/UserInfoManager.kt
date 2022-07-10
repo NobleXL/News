@@ -1,4 +1,4 @@
-package com.noble.news.model
+package com.noble.news.model.service
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -36,6 +36,17 @@ class UserInfoManager(private val context: Context) {
         context.userStore.edit {
             it[LOGGED] = userName.isNotEmpty()
             it[USERNAME] = userName
+        }
+    }
+
+    /**
+     * 清空用户登录数据
+     *
+     */
+    suspend fun clear() {
+        context.userStore.edit {
+            it[LOGGED] = false
+            it[USERNAME] = ""
         }
     }
 

@@ -3,7 +3,7 @@ package com.noble.news.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.noble.news.model.UserInfoManager
+import com.noble.news.model.service.UserInfoManager
 import com.noble.news.model.entity.UserInfoEntity
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -48,6 +48,13 @@ class UserViewModel(context: Context) : ViewModel() {
             userInfoManager.save("user001")
         }
         onClose()
+    }
+
+    fun clear() {
+        viewModelScope.launch {
+            userInfoManager.clear() //清除本地数据存储
+            userInfo = null //置空内存数据
+        }
     }
 
 }

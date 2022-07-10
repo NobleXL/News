@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.noble.news.model.entity.Category
 import com.noble.news.model.entity.DataType
 import com.noble.news.model.entity.SwiperEntity
+import com.noble.news.model.service.HomeService
 
 /**
  * @author 小寒
@@ -18,15 +19,28 @@ import com.noble.news.model.entity.SwiperEntity
  */
 class MainViewModel : ViewModel() {
 
+    val homeService = HomeService.instance()
+
     //分类数据
-    val categories by mutableStateOf(
+    var categories by mutableStateOf(
         listOf(
-            Category("思想政治"),
-            Category("法律法规"),
-            Category("职业道德"),
-            Category("诚信自律")
+            Category("思想政治1", "1"),
+            Category("法律法规2", "2"),
+            Category("职业道德3", "3"),
+            Category("诚信自律4", "4")
         )
     )
+        private set
+
+    suspend fun categoryData() {
+        val categoryRes = homeService.category()
+        if (categoryRes.code == 0) {
+            categories = categoryRes.data
+        } else {
+            //不成功的情况下，读取message
+            val message = categoryRes.message
+        }
+    }
 
     //当前分类下标
     var categoryIndex by mutableStateOf(0)
