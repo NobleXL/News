@@ -10,12 +10,17 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import com.noble.news.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -45,12 +50,19 @@ fun SwiperContent(vm: MainViewModel) {
 
     //实现自动轮播
     DisposableEffect(Unit) {
+
+        coroutineScope.launch {
+            vm.swiperData()
+        }
+
         val timer = Timer()
 
         timer.schedule(object : TimerTask() {
             override fun run() {
-                coroutineScope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                if (vm.swiperLoaded) {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
                 }
             }
 
@@ -66,7 +78,8 @@ fun SwiperContent(vm: MainViewModel) {
         state = pagerState,
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .clip(RoundedCornerShape(8.dp)) //给图片设置圆角
+            .clip(RoundedCornerShape(8.dp)), //给图片设置圆角
+        userScrollEnabled = vm.swiperLoaded
     ) { index ->
         val actualIndex =
             (index - initialIndex).floorMod(actualCount) //index - (index.floorDiv(actualCount)) * actualCount
@@ -77,7 +90,12 @@ fun SwiperContent(vm: MainViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 //设置比例
-                .aspectRatio(7 / 3f),
+                .aspectRatio(7 / 3f)
+                .placeholder(
+                    visible = !vm.swiperLoaded,
+                    highlight = PlaceholderHighlight.shimmer(),
+                    color = Color.LightGray
+                ),
             //设置裁剪
             contentScale = ContentScale.Crop
         )

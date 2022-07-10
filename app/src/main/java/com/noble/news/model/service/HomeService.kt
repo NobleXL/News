@@ -2,6 +2,7 @@ package com.noble.news.model.service
 
 import com.noble.news.model.Network
 import com.noble.news.model.entity.CategoryResponse
+import com.noble.news.model.entity.SwiperResponse
 import retrofit2.http.GET
 
 /**
@@ -14,7 +15,10 @@ interface HomeService {
     @GET("category/list")
     suspend fun category(): CategoryResponse
 
-    companion object{
+    @GET("recommand/banner")
+    suspend fun banner(): SwiperResponse
+
+    companion object {
         fun instance(): HomeService {
             return Network.createService(HomeService::class.java)
         }
