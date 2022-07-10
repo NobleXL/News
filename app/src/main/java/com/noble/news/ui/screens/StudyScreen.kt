@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.placeholder.placeholder
 import com.noble.news.model.entity.VideoEntity
 import com.noble.news.ui.components.*
 import com.noble.news.ui.components.TopAppBar
@@ -120,7 +121,9 @@ fun StudyScreen(
                 ) {
                     Text(
                         text = category.title,
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .placeholder(visible = !vm.categoryLoaded, color = Color.LightGray),
                         fontSize = 14.sp
                     )
                 }
