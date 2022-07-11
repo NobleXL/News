@@ -1,7 +1,11 @@
 package com.noble.news.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.noble.news.model.entity.ArticleEntity
+import com.noble.news.model.service.ArticleService
 
 /**
  * @author 小寒
@@ -10,60 +14,79 @@ import com.noble.news.model.entity.ArticleEntity
  */
 class ArticleViewModel : ViewModel() {
 
+    private val articleService = ArticleService.instance()
+
+    private val pageSize = 10
+    private var pageOffset = 1
+
     //文章列表数据
-    var list = listOf(
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
-        ),
-        ArticleEntity(
-            title = "人社部向疫情防控期参与复工复产的劳动者表示",
-            source = "“学习强国”学习平台",
-            timestamp = "2020-02-10"
+    var list by mutableStateOf(
+        listOf(
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            ),
+            ArticleEntity(
+                title = "人社部向疫情防控期参与复工复产的劳动者表示",
+                source = "“学习强国”学习平台",
+                timestamp = "2020-02-10"
+            )
         )
     )
         private set
+
+    //第一页文章列表是否加载完成
+    var listLoaded by mutableStateOf(false)
+        private set
+
+    suspend fun fetchArticleList() {
+        val res = articleService.list(pageOffset = pageOffset, pageSize = pageSize)
+        if (res.code == 0 && res.data != null) {
+            list = res.data
+            listLoaded = true
+        }
+    }
 
     //HTML 头部
     private val htmlHeader = """
