@@ -1,12 +1,12 @@
 package com.noble.news.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.noble.news.model.entity.ArticleEntity
 import com.noble.news.model.service.ArticleService
-import kotlinx.coroutines.delay
 
 /**
  * @author 小寒
@@ -85,19 +85,46 @@ class ArticleViewModel : ViewModel() {
     var refreshing by mutableStateOf(false)
         private set
 
+    //是否还有更多
+    private var hasMore = false
+
     suspend fun fetchArticleList() {
         val res = articleService.list(pageOffset = pageOffset, pageSize = pageSize)
         if (res.code == 0 && res.data != null) {
-            list = res.data
+            val tmpList = mutableListOf<ArticleEntity>()
+            if (pageOffset != 1) {
+                tmpList.addAll(list)
+            }
+            tmpList.addAll(res.data)
+            //是否还有更多数据
+            hasMore = res.data.size == pageSize
+            list = tmpList
             listLoaded = true
             refreshing = false
+        } else {
+            pageOffset--
+            if (pageOffset <= 1) {
+                pageOffset = 1
+            }
         }
     }
 
+    /**
+     * 下拉刷新
+     *
+     */
     suspend fun refresh() {
         pageOffset = 1
+//        listLoaded = false
         refreshing = true
         fetchArticleList()
+    }
+
+    suspend fun loadMore() {
+        if (hasMore) {
+            pageOffset++
+            fetchArticleList()
+        }
     }
 
     //HTML 头部

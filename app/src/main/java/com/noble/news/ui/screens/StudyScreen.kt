@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -24,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.noble.news.model.entity.VideoEntity
+import com.noble.news.extension.OnBottomReached
 import com.noble.news.ui.components.*
 import com.noble.news.ui.components.TopAppBar
 import com.noble.news.viewmodel.ArticleViewModel
@@ -56,6 +57,11 @@ fun StudyScreen(
     }
 
     val coroutineScope = rememberCoroutineScope()
+
+    val lazyListState = rememberLazyListState()
+    lazyListState.OnBottomReached(buffer = 3) {
+        coroutineScope.launch { articleViewModel.loadMore() }
+    }
 
     Column(modifier = Modifier) {
         //标题栏
@@ -176,7 +182,7 @@ fun StudyScreen(
                     articleViewModel.refresh()
                 }
             }) {
-            LazyColumn() {
+            LazyColumn(state = lazyListState) {
 
                 //轮播图
                 item {
