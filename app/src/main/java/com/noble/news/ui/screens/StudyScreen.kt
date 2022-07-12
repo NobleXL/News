@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,12 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.noble.news.model.entity.VideoEntity
 import com.noble.news.ui.components.*
 import com.noble.news.ui.components.TopAppBar
 import com.noble.news.viewmodel.ArticleViewModel
 import com.noble.news.viewmodel.MainViewModel
 import com.noble.news.viewmodel.VideoViewModel
+import kotlinx.coroutines.launch
 
 /**
  * @author 小寒
@@ -50,6 +54,8 @@ fun StudyScreen(
         //获取文章列表
         articleViewModel.fetchArticleList()
     }
+
+    val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier) {
         //标题栏
@@ -163,44 +169,51 @@ fun StudyScreen(
             }
         }
 
-        LazyColumn() {
-
-            //轮播图
-            item {
-                SwiperContent(vm = vm)
-            }
-
-            //通知公告
-            item {
-                NotificationContent(vm)
-            }
-
-            // 互相切换时，当前的滑动状态会保留
-            if (vm.showArticleList) {
-                //文章列表
-                items(articleViewModel.list) { article ->
-                    ArticleItem(
-                        article,
-                        articleViewModel.listLoaded,
-                        modifier = Modifier.clickable {
-                            onNavigateToArticle()
-                        }
-                    )
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
+            onRefresh = {
+                coroutineScope.launch {
+                    articleViewModel.refresh()
                 }
-            } else {
-                //视频列表
-                items(videoViewModel.list) { videoEntity ->
-                    VideoItem(
-                        modifier = Modifier.clickable {
-                            onNavigateToVideo()
-                        },
-                        videoEntity = videoEntity
-                    )
-                }
-            }
+            }) {
+            LazyColumn() {
 
+                //轮播图
+                item {
+                    SwiperContent(vm = vm)
+                }
+
+                //通知公告
+                item {
+                    NotificationContent(vm)
+                }
+
+                // 互相切换时，当前的滑动状态会保留
+                if (vm.showArticleList) {
+                    //文章列表
+                    items(articleViewModel.list) { article ->
+                        ArticleItem(
+                            article,
+                            articleViewModel.listLoaded,
+                            modifier = Modifier.clickable {
+                                onNavigateToArticle()
+                            }
+                        )
+                    }
+                } else {
+                    //视频列表
+                    items(videoViewModel.list) { videoEntity ->
+                        VideoItem(
+                            modifier = Modifier.clickable {
+                                onNavigateToVideo()
+                            },
+                            videoEntity = videoEntity
+                        )
+                    }
+                }
+
+            }
         }
-
     }
 }
 

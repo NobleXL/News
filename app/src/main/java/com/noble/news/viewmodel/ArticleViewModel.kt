@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.noble.news.model.entity.ArticleEntity
 import com.noble.news.model.service.ArticleService
+import kotlinx.coroutines.delay
 
 /**
  * @author 小寒
@@ -80,12 +81,23 @@ class ArticleViewModel : ViewModel() {
     var listLoaded by mutableStateOf(false)
         private set
 
+    //是否正在刷新
+    var refreshing by mutableStateOf(false)
+        private set
+
     suspend fun fetchArticleList() {
         val res = articleService.list(pageOffset = pageOffset, pageSize = pageSize)
         if (res.code == 0 && res.data != null) {
             list = res.data
             listLoaded = true
+            refreshing = false
         }
+    }
+
+    suspend fun refresh() {
+        pageOffset = 1
+        refreshing = true
+        fetchArticleList()
     }
 
     //HTML 头部
