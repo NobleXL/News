@@ -25,10 +25,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.placeholder
 import com.noble.news.model.entity.VideoEntity
 
 @Composable
-fun VideoItem(modifier: Modifier = Modifier,videoEntity: VideoEntity) {
+fun VideoItem(modifier: Modifier = Modifier, videoEntity: VideoEntity, loaded: Boolean) {
 
     val constraintSet = ConstraintSet {
         val title = createRefFor("title")
@@ -77,6 +80,11 @@ fun VideoItem(modifier: Modifier = Modifier,videoEntity: VideoEntity) {
                 .layoutId("cover")
                 .aspectRatio(16 / 9f)
                 .clip(RoundedCornerShape(8.dp))
+                .placeholder(
+                    visible = !loaded,
+                    highlight = PlaceholderHighlight.shimmer(),
+                    color = Color.LightGray
+                )
         )
 
         Text(

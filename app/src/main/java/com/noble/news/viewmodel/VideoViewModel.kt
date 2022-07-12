@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.noble.news.model.entity.VideoEntity
+import com.noble.news.model.service.VideoService
 
 /**
  * @author 小寒
@@ -12,57 +13,100 @@ import com.noble.news.model.entity.VideoEntity
  * @date 2022/7/1 20:41
  */
 class VideoViewModel : ViewModel() {
-    var list = listOf(
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner4.jpg"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner5.jpg"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
-        ),
-        VideoEntity(
-            title = "行测老师告诉你如何定制合适自己的学习方案",
-            type = "视频课程",
-            duration = "00:02:00",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
+
+    private val videoService = VideoService.instance()
+
+    var list by mutableStateOf(
+        listOf(
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner4.jpg"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner5.jpg"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
+            ),
+            VideoEntity(
+                title = "行测老师告诉你如何定制合适自己的学习方案",
+                type = "视频课程",
+                duration = "00:02:00",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp"
+            )
         )
     )
         private set
+
+    private val pageSize = 10
+    private var pageOffset = 1
+
+    var refreshing by mutableStateOf(false)
+        private set
+
+    private var hasMore = false
+    var listLoaded by mutableStateOf(false)
+        private set
+
+    suspend fun fetchList() {
+        val res = videoService.list(pageOffset, pageSize)
+        if (res.code == 0 && res.data != null) {
+            val tmpList = mutableListOf<VideoEntity>()
+            if (pageOffset != 1) {
+                tmpList.addAll(list)
+            }
+            tmpList.addAll(res.data)
+            hasMore = res.data.size == pageSize
+            list = tmpList
+            refreshing = false
+            listLoaded = true
+        }
+    }
+
+    suspend fun refresh() {
+        pageOffset = 1
+        refreshing = true
+        fetchList()
+    }
+
+    suspend fun loadMore() {
+        if (hasMore) {
+            pageOffset++
+            fetchList()
+        }
+    }
 
     var videoUrl by mutableStateOf("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
         private set
