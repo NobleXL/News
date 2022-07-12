@@ -159,6 +159,8 @@ class ArticleViewModel : ViewModel() {
     """.trimIndent()
     )
 
+    var infoLoaded by mutableStateOf(false)
+        private set
 
     suspend fun fetchInfo() {
         val res = articleService.info("")
@@ -168,6 +170,7 @@ class ArticleViewModel : ViewModel() {
                         ${articleEntity?.content ?: ""}
                         $htmlFooter
                     """.trimIndent()
+            infoLoaded = true
         }
     }
 

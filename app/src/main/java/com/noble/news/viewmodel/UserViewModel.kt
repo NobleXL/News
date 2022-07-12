@@ -1,12 +1,19 @@
 package com.noble.news.viewmodel
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.noble.news.model.service.UserInfoManager
 import com.noble.news.model.entity.UserInfoEntity
+import com.noble.news.model.service.UserService
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 
 /**
  * @author 小寒
@@ -16,6 +23,11 @@ import kotlinx.coroutines.launch
 class UserViewModel(context: Context) : ViewModel() {
 
     private val userInfoManager = UserInfoManager(context = context)
+    private val userService = UserService.instance()
+
+    var userName by mutableStateOf("")
+
+    var password by mutableStateOf("")
 
     var userInfo: UserInfoEntity? = null
         private set
@@ -38,16 +50,42 @@ class UserViewModel(context: Context) : ViewModel() {
             return userInfo != null
         }
 
+    //是否正在登录
+    var loading by mutableStateOf(false)
+        private set
+
+    var error by mutableStateOf("")
+        private set
+
     /**
      * 登录操作
      */
-    fun login(onClose: () -> Unit) {
-        //模拟网络请求数据回传
-        userInfo = UserInfoEntity("user001")
-        viewModelScope.launch {
-            userInfoManager.save("user001")
+    suspend fun login(onClose: () -> Unit) {
+        error = ""
+        loading = true
+        val res = userService.signIn(userName, md5(password))
+        if (res.code == 0 && res.data != null) {
+            userInfo = res.data
+            userInfoManager.save(userName)
+            onClose()
+        } else {
+            //失败
+            error = res.message
         }
-        onClose()
+        loading = false
+    }
+
+    fun md5(content: String): String {
+        val hash = MessageDigest.getInstance("MD5").digest(content.toByteArray())
+        val hex = StringBuilder(hash.size * 2)
+        for (b in hash) {
+            var str = Integer.toHexString(b.toInt())
+            if (b < 0x10) {
+                str = "0$str"
+            }
+            hex.append(str.substring(str.length - 2))
+        }
+        return hex.toString()
     }
 
     fun clear() {

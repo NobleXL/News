@@ -6,3 +6,5 @@ package com.noble.news.model.entity
  * @date 2022/7/10 15:05
  */
 data class UserInfoEntity(val userName: String)
+
+data class UserInfoResponse(val data: UserInfoEntity?) : BaseResponse()

@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.noble.news.R
 import com.noble.news.compositionLocal.LocalUserViewModel
 import com.noble.news.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 /**
  * @author 小寒
@@ -51,13 +52,7 @@ fun LoginScreen(onClose: () -> Unit) {
 
     val userViewModel = LocalUserViewModel.current
 
-    var userName by remember {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
-    }
+    val coroutineScope = rememberCoroutineScope()
 
     var showPassword by remember {
         mutableStateOf(false)
@@ -120,8 +115,8 @@ fun LoginScreen(onClose: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(
-                    value = userName,
-                    onValueChange = { userName = it },
+                    value = userViewModel.userName,
+                    onValueChange = { userViewModel.userName = it },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -148,8 +143,8 @@ fun LoginScreen(onClose: () -> Unit) {
                 )
 
                 TextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = userViewModel.password,
+                    onValueChange = { userViewModel.password = it },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -182,17 +177,29 @@ fun LoginScreen(onClose: () -> Unit) {
                         focusedLabelColor = Color.LightGray,
                         unfocusedLabelColor = Color.LightGray,
                         cursorColor = Color.White
-                    )
+                    ),
+                    enabled = !userViewModel.loading
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 TextButton(onClick = {
-                    userViewModel.login(onClose = onClose)
-                }) {
-                    Text(text = "登录", color = Color.White)
+                    coroutineScope.launch {
+                        userViewModel.login(onClose = onClose)
+                    }
+                }, enabled = !userViewModel.loading) {
+                    Row {
+                        Text(text = "登录", color = Color.White)
+                        if (userViewModel.loading) {
+                            CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                        }
+                    }
                 }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(text = userViewModel.error, color = Color.Red, fontSize = 13.sp)
 
             TextButton(onClick = { }) {
                 Text(text = "还没有账号？点击立即注册", color = Color.LightGray, fontSize = 12.sp)
@@ -206,6 +213,6 @@ fun LoginScreen(onClose: () -> Unit) {
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen{}
+    LoginScreen {}
 }
 
