@@ -30,6 +30,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArticleDetailScreen(articleViewModel: ArticleViewModel = viewModel(), onBack: () -> Unit) {
 
+    LaunchedEffect(Unit) {
+        articleViewModel.fetchInfo()
+    }
+
     val webViewState = rememberWebViewState(data = articleViewModel.content)
 
     var fontScale by remember {

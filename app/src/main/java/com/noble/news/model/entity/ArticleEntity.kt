@@ -13,7 +13,10 @@ data class ArticleEntity(
     val title: String,
     val source: String,
     @Json(name = "time")
-    val timestamp: String
+    val timestamp: String,
+    var content: String? = ""
 )
 
-data class ArticleListResponse(val data: List<ArticleEntity>?): BaseResponse()
+data class ArticleListResponse(val data: List<ArticleEntity>?) : BaseResponse()
+
+data class ArticleInfoResponse(val data: ArticleEntity?) : BaseResponse()
